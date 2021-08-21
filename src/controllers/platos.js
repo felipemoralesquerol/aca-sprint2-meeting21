@@ -7,6 +7,21 @@ exports.platosList = async function (req, res, next) {
     res.json(todos);
 };
 
+
+exports.platosExistePorCodigo = async function (req, res, next) {
+    console.log(req.body);
+
+    //Busqueda estricta (por coincidencia total)
+    const filtrado = await platos.find({ codigo: req.body.codigo });
+    console.log(filtrado.length);
+    if (filtrado.length == 0) {
+        return res.status(404).json({ mensaje: 'Plato inexistente' })
+    } else {
+        next();
+    }
+
+};
+
 exports.platosListPorNombre = async function (req, res, next) {
     console.log(req.query);
 
@@ -41,7 +56,7 @@ exports.platosAdd = async function (req, res, next) {
 exports.platosDelete = async function (req, res, next) {
     //TODO: Controlar cuando se intenta borrar con un id "alterado"
     try {
-        const cant = await platos.deleteOne({ _id: req.params.id }, (err, result) => {
+        const cant = await platos.deleteOne({ codigo: req.params.codigo }, (err, result) => {
             if (err) {
                 return res.send(console.log(err.message));
             } else {
@@ -62,12 +77,17 @@ exports.platosDelete = async function (req, res, next) {
 exports.platosUpdate = async function (req, res, next) {
     //TODO: Controlar cuando se intenta borrar con un id "alterado"
     try {
-        const cant = await platos.updateOne({ _id: req.params.id }, req.body, (err, result) => {
+        if (req.params.codigo !== req.body.codigo) {
+            return res.status(404).json('Actualización descartada por incompatibilidad de código');
+        };
+        const cant = await platos.updateOne({ codigo: req.params.codigo }, req.body, (err, result) => {
+            console.log('nuevo')
+            console.log(err)
             if (err) {
                 return res.send(console.log(err.message));
             } else {
                 console.log(result)
-                return res.json('OK: Se actualizaron ' + result.deletedCount + ' documentos');
+                return res.json('OK: Se actualizaron ' + result.nModified + ' documentos');
             };
         }
         );
