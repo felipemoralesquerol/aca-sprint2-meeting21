@@ -1,8 +1,8 @@
-# Instrucciones a nviel de desarrollo
+# Instrucciones a nivel de desarrollo
 `npm init -yes`
 
-`npm i mongoose`
+`npm i express morgan dotenv mongoose`
 
 `npm i bcrypt`
 
-otros: express, morgan, dotenv
+
