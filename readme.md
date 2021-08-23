@@ -5,4 +5,10 @@
 
 `npm i bcrypt`
 
+# Entidades incluidas
+- Usuarios
+- Productos
+- Platos
+
+
 
